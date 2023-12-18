@@ -2,10 +2,7 @@
 #include "client.h"
 
 #include "..\Networking\networking.h"
-#include "..\SnekServer\messageTypes.h"
-
-#define IP "127.0.0.1"
-#define PORT 8080
+#include "..\SnekServer\common.h"
 
 int main()
 {
@@ -13,8 +10,15 @@ int main()
 	Client client;
 	client.Connect(IP, PORT);
 	
-	// Run game here
-	std::cout << "Hello World!\n";
+	// Main game loop
+	bool run = true;
+	while (run)
+	{
+		// Handle all messages from server
+		client.HandleMessages();
+
+		// GameGaming
+	}
 
 	// Exit everything
 	client.Disconnect();

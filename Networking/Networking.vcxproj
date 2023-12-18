@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{efa3abee-1908-4029-bf7a-ad88f66238c7}</ProjectGuid>
-    <RootNamespace>Snek</RootNamespace>
+    <ProjectGuid>{5f4a129e-6eaa-49b9-8b54-96589cfefaa2}</ProjectGuid>
+    <RootNamespace>Networking</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,8 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="classes.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClInclude Include="client.h" />
+    <ClInclude Include="connection.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="message.h" />
+    <ClInclude Include="networking.h" />
+    <ClInclude Include="queue.h" />
+    <ClInclude Include="server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

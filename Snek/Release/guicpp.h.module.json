@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\guicpp.h.obj",
+            "outputs": [
+                "C:\\dev\\SnekCpp\\Snek\\Release\\vc143.pdb",
+                "Release\\",
+                "C:\\dev\\SnekCpp\\Snek\\Release\\guicpp.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "guicpp.h",
+                    "source-path": "c:\\dev\\snekcpp\\snek\\guicpp.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

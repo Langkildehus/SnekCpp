@@ -3,5 +3,12 @@ C:\dev\SnekCpp\Snek\client.cpp;C:\dev\SnekCpp\Snek\Debug\client.obj
 C:\dev\SnekCpp\Snek\gui.cpp;C:\dev\SnekCpp\Snek\Debug\gui.obj
 C:\dev\SnekCpp\Snek\gui.h;C:\dev\SnekCpp\Snek\Debug\gui.h.obj
 C:\dev\SnekCpp\Snek\guitestmain.cpp;C:\dev\SnekCpp\Snek\Debug\guitestmain.obj
-C:\dev\SnekCpp\Snek\IMGUITEST.cpp;C:\dev\SnekCpp\Snek\Debug\IMGUITEST.obj
 C:\dev\SnekCpp\Snek\main.cpp;C:\dev\SnekCpp\Snek\Debug\main.obj
+C:\dev\SnekCpp\Snek\imgui\imgui.cpp;C:\dev\SnekCpp\Snek\Debug\imgui.obj
+C:\dev\SnekCpp\Snek\imgui\imgui_demo.cpp;C:\dev\SnekCpp\Snek\Debug\imgui_demo.obj
+C:\dev\SnekCpp\Snek\imgui\imgui_draw.cpp;C:\dev\SnekCpp\Snek\Debug\imgui_draw.obj
+C:\dev\SnekCpp\Snek\imgui\imgui_impl_dx9.cpp;C:\dev\SnekCpp\Snek\Debug\imgui_impl_dx9.obj
+C:\dev\SnekCpp\Snek\imgui\imgui_impl_win32.cpp;C:\dev\SnekCpp\Snek\Debug\imgui_impl_win32.obj
+C:\dev\SnekCpp\Snek\imgui\imgui_tables.cpp;C:\dev\SnekCpp\Snek\Debug\imgui_tables.obj
+C:\dev\SnekCpp\Snek\imgui\imgui_widgets.cpp;C:\dev\SnekCpp\Snek\Debug\imgui_widgets.obj
+C:\dev\SnekCpp\Snek\grid.cpp;C:\dev\SnekCpp\Snek\Debug\grid.obj

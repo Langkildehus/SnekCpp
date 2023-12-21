@@ -1,12 +1,11 @@
 ﻿  Scanning sources for module dependencies...
-  grid.cpp
-C:\dev\SnekCpp\Snek\grid.cpp(28,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\dev\SnekCpp\Snek\grid.cpp(28,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\dev\SnekCpp\Snek\grid.cpp(29,82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\dev\SnekCpp\Snek\grid.cpp(29,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating code
-  3 of 1598 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  Snek.vcxproj -> C:\dev\SnekCpp\Release\Snek.exe
+  apple.cpp
+  player.cpp
+  powerups.cpp
+C:\dev\SnekCpp\Snek\apple.cpp(3,1): error C2653: 'Apple': is not a class or namespace name
+C:\dev\SnekCpp\Snek\apple.cpp(4,2): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\dev\SnekCpp\Snek\apple.cpp(5,1): error C2550: 'Apple': constructor initializer lists are only allowed on constructor definitions
+C:\dev\SnekCpp\Snek\apple.cpp(7,1): warning C4508: 'Apple': function should return a value; 'void' return type assumed
+C:\dev\SnekCpp\Snek\apple.cpp(9,6): error C2653: 'Apple': is not a class or namespace name
+C:\dev\SnekCpp\Snek\apple.cpp(11,12): error C2065: 'x': undeclared identifier
+C:\dev\SnekCpp\Snek\apple.cpp(11,23): error C2065: 'y': undeclared identifier

@@ -15,18 +15,22 @@ int __stdcall wWinMain(
 	Grid grid = Grid(40, 30, 30);
 
 	// Create GUI
-	gui::Init("TEST MENU", "TEST MENU CLASS");
+	gui::Init("Snake Battle Royale", "Snake Battle Royale Class");
 
+	int mark = 0;
 	while (gui::exit)
 	{
 		gui::BeginRender();
 
-		grid.Render();
+		grid.Render(mark);
+		mark--;
+		if (mark < 0)
+			mark = 29;
 
 		//gui::Render(); // ONLY DEMO
 		gui::EndRender();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 
 	// Destroy GUI

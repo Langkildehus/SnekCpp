@@ -5,10 +5,10 @@ class Grid
 public:
 	Grid(int _rows, int _cols, int _size);
 
-	void Render();
+	void Render(int mark);
 
 private:
-	void Draw();
+	void Draw(int mark);
 	void RenderFrame();
 
 private:

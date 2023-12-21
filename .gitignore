@@ -1,6 +1,22 @@
-Snek/x64/
+# Root folder
+.vs/
 x64/
-.vs
+Debug/
+Release/
+
+# Snek
+Snek/x64/
+Snek/Debug/
+Snek/Release/
+
+# SnekServer
+SnekServer/Debug/
+SnekServer/Release/
+
+# Networking
+Networking/Debug/
+Networking/Release
+
 
 # Prerequisites
 *.d

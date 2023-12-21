@@ -1,48 +1,94 @@
-#include "..\..\imgui\imgui.h"
+#include <vector>
+#include <unordered_map>
+
+#include "imgui\imgui.h"
 
 #include "grid.h"
 #include "gui.h"
+#include "powerups.h"
 
-Grid::Grid(int _rows, int _cols, int _size)
-	: rows(_rows), cols(_cols), size(_size)
+Grid::Grid(int _cols, int _rows, int _size, std::unordered_map<uint32_t, Player>& _players, std::vector<Powerup>& _powerups)
+	: cols(_cols), rows(_rows), size(_size), players(_players), powerups(_powerups)
 {
-	startX = gui::WIDTH / 2 - size * (rows + 1) / 2 + 50;
-	startY = gui::HEIGHT / 2 - size * (cols + 1) / 2 + 50;
+	startX = gui::WIDTH / 2 - size * (cols + 0) / 2;
+	startY = gui::HEIGHT / 2 - size * (rows + 0) / 2 + 15;
 
-	width = rows * size + 100;
-	height = cols * size + 100;
+	width = cols * size + 100;
+	height = rows * size + 130;
 }
 
-void Grid::Draw(int mark)
+int Grid::GetRowCount()
 {
-	const ImU32 color = ImColor(ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+	return rows;
+}
+
+int Grid::GetColCount()
+{
+	return cols;
+}
+
+void Grid::DrawGrid()
+{
 	ImDrawList* draw = ImGui::GetBackgroundDrawList();
 
-	for (int x = 0; x < rows; x++)
+	for (int x = 0; x < cols; x++)
 	{
-		for (int y = 0; y < cols; y++)
+		for (int y = 0; y < rows; y++)
 		{
-			ImVec2 topLeft = ImVec2(x * size + startX, y * size + startY);
-			ImVec2 botRight = ImVec2((x + 1) * size + startX, (y + 1) * size + startY);
-
-			if (y == mark)
-				ImGui::GetWindowDrawList()->AddRectFilled(topLeft, botRight, color);
-			else
-				ImGui::GetWindowDrawList()->AddRect(topLeft, botRight, color);
+			ImVec2 topLeft = ImVec2((float)(x * size + startX), (float)(y * size + startY));
+			ImVec2 botRight = ImVec2((float)((x + 1) * size + startX), (float)((y + 1) * size + startY));
+			ImGui::GetWindowDrawList()->AddRect(topLeft, botRight, WHITE);
 		}
 	}
 }
 
-void Grid::Render(int mark)
+void Grid::DrawPowerups()
+{
+	for (Powerup& powerup : powerups)
+	{
+		ImVec2 topLeft = ImVec2((float)(powerup.x * size + startX), (float)(powerup.y * size + startY));
+		ImVec2 botRight = ImVec2((float)((powerup.x + 1) * size + startX), (float)((powerup.y + 1) * size + startY));
+		ImGui::GetWindowDrawList()->AddRectFilled(topLeft, botRight, powerup.GetColor());
+	}
+}
+
+void Grid::DrawSnakes()
+{
+	for (std::pair<const uint32_t, Player>& player : players)
+	{
+		for (Position& pos : player.second.tail)
+		{
+			ImVec2 topLeft = ImVec2((float)(pos.x * size + startX), (float)(pos.y * size + startY));
+			ImVec2 botRight = ImVec2((float)((pos.x + 1) * size + startX), (float)((pos.y + 1) * size + startY));
+
+			ImGui::GetWindowDrawList()->AddRectFilled(topLeft, botRight, player.second.GetColor());
+		}
+	}
+}
+
+void Grid::DrawBorder()
+{
+	ImVec2 topLeft = ImVec2((float)startX, (float)startY);
+	ImVec2 botRight = ImVec2((float)(startX + cols * size), (float)(startY + rows * size));
+	ImGui::GetWindowDrawList()->AddRect(topLeft, botRight, WHITE);
+}
+
+void Grid::Render()
 {
 	RenderFrame();
-	Draw(mark);
+
+	//DrawGrid();
+	DrawPowerups();
+	DrawSnakes();
+	DrawBorder();
+
 	ImGui::End();
 }
 
 void Grid::RenderFrame()
 {
-	ImGui::SetNextWindowPos({ (float)startX - 50, 50.0f });
+	//ImGui::SetNextWindowPos({ (float)startX - 50, 50.0f });
+	ImGui::SetNextWindowPos({ 0.0f, 0.0f });
 	ImGui::SetNextWindowSize({ (float)width, (float)height });
 	ImGui::Begin(
 		"SnakeBattleRoyale",

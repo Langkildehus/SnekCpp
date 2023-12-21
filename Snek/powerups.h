@@ -1,26 +1,20 @@
 #pragma once
 
+#include "imgui\imgui.h"
+
+#include "player.h"
+
 class Powerup
 {
-private:
-	int x, y;
-};
-
-// Orange doubles snake speed
-class Orange : Powerup
-{
-	Orange();
-};
-
-// +1 length
-class Apple
-{
 public:
-	Apple(int x, int y);
+	Powerup(int _x, int _y, ImU32 _color);
 
-	bool CheckCollision(int x, int y);
+	bool CheckCollision(Position& pos);
+	ImU32 GetColor();
+
+public:
+	int x, y;
 
 private:
-	int x, y;
+	ImU32 color;
 };
-

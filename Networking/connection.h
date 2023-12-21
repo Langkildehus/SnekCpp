@@ -124,8 +124,11 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						std::cout << "[" << id << "] Read header failed!\n";
-						std::cout << ec.message() << "\n";
+						if (m_ownerType == owner::server)
+						{
+							std::cout << "[" << id << "] Read header failed!\n";
+							std::cout << ec.message() << "\n";
+						}
 
 						m_socket.close();
 						return;
@@ -156,8 +159,12 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						std::cout << "[" << id << "] Read body failed!\n";
-						std::cout << ec.message() << "\n";
+						if (m_ownerType == owner::server)
+						{
+							std::cout << "[" << id << "] Read body failed!\n";
+							std::cout << ec.message() << "\n";
+						}
+
 						m_socket.close();
 						return;
 					}
@@ -177,8 +184,12 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						std::cout << "[" << id << "] Write header failed!\n";
-						std::cout << ec.message() << "\n";
+						if (m_ownerType == owner::server)
+						{
+							std::cout << "[" << id << "] Write header failed!\n";
+							std::cout << ec.message() << "\n";
+						}
+
 						m_socket.close();
 						return;
 					}
@@ -211,8 +222,11 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						std::cout << "[" << id << "] Write body failed!\n";
-						std::cout << ec.message() << "\n";
+						if (m_ownerType == owner::server)
+						{
+							std::cout << "[" << id << "] Write body failed!\n";
+							std::cout << ec.message() << "\n";
+						}
 						m_socket.close();
 						return;
 					}
@@ -278,7 +292,9 @@ namespace net
 					if (!ec)
 					{
 						// If an error occurs, close socket and return
-						std::cout << "Client disconnected (ReadValidation)\n";
+						if (m_ownerType == owner::server)
+							std::cout << "Client banned! (ReadValidation FAILED)\n";
+
 						m_socket.close();
 						return;
 					}

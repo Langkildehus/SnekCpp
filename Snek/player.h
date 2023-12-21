@@ -1,6 +1,19 @@
 #pragma once
 
-#include <vector>
+#include <deque>
+
+#include "imgui\imgui.h"
+
+// Forward declare Grid
+class Grid;
+
+enum class Direction
+{
+	Up,
+	Right,
+	Down,
+	Left
+};
 
 struct Position
 {
@@ -10,10 +23,28 @@ struct Position
 class Player
 {
 public:
-	Player(int x, int y);
+	Player() = default;
+	Player(int x, int y, Grid* _grid);
 
-	Position GetHead();
+	void Move();
+	void AddLength(int l);
+	void SetDirection(Direction newDirection);
+
+	Position& GetHead();
+	ImU32 GetColor();
 
 private:
-	std::vector<Position> tail;
+	void UpdateTail();
+
+public:
+	std::deque<Position> tail;
+
+private:
+	int food = 0;
+
+	Direction direction = Direction::Up;
+
+	Grid* grid;
+
+	ImU32 color;
 };

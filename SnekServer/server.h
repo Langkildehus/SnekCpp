@@ -1,7 +1,7 @@
 #pragma once
 
 #include "..\Networking\networking.h"
-#include "common.h"
+#include "..\Snek\common.h"
 
 class Server : public net::ServerInterface<MessageTypes>
 {

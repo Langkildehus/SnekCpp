@@ -1,7 +1,7 @@
 #include <d3d9.h>
-#include "..\..\imgui\imgui.h"
-#include "..\..\imgui\imgui_impl_dx9.h"
-#include "..\..\imgui\imgui_impl_win32.h"
+#include "imgui\imgui.h"
+#include "imgui\imgui_impl_dx9.h"
+#include "imgui\imgui_impl_win32.h"
 
 #include "gui.h"
 
@@ -85,7 +85,7 @@ void gui::CreateHWindow(const char* windowName, const char* className) noexcept
 	RegisterClassExA(&windowClass);
 
 	// The first two numbers mean starting position of window
-	window = CreateWindowA(className, windowName, WS_POPUP, 0, 0, WIDTH, HEIGHT, 0, 0, windowClass.hInstance, 0);
+	window = CreateWindowA(className, windowName, WS_POPUP, 1920 / 2 - WIDTH / 2, 1080 / 2 - HEIGHT / 2, WIDTH, HEIGHT, 0, 0, windowClass.hInstance, 0);
 
 	ShowWindow(window, SW_SHOWDEFAULT);
 	UpdateWindow(window);

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "..\Networking\networking.h"
-#include "..\SnekServer\common.h"
 
-class Client : public net::ClientInterface<MessageTypes>
+#include "common.h"
+
+class SnakeClient : public net::ClientInterface<MessageTypes>
 {
 public:
 	// Should be called to send update information to server

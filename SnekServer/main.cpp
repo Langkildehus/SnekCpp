@@ -2,7 +2,7 @@
 #include "server.h"
 
 #include "..\Networking\networking.h"
-#include "common.h"
+#include "..\Snek\common.h"
 
 int main()
 {

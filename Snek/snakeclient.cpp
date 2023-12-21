@@ -1,11 +1,12 @@
-#include "client.h"
+#include "snakeclient.h"
+#include "common.h"
 
-void Client::UpdateServer()
+void SnakeClient::UpdateServer()
 {
 	// Should update server with position information
 }
 
-void Client::HandleMessages()
+void SnakeClient::HandleMessages()
 {
 	while (!Incoming().IsEmpty())
 	{

@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "imgui\imgui.h"
+#include "imgui.h"
 
 #include "player.h"
 #include "grid.h"

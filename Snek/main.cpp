@@ -2,36 +2,34 @@
 #include <vector>
 #include <unordered_map>
 
+// Library imports
+#include "glfw3.h"
+
 // Networking imports
 #include "..\Networking\networking.h"
 #include "common.h"
-#include "snakeclient.h"
-
-// Library imports
-#include <d3d9.h>
-#include "imgui\imgui.h"
 
 // Headerfiles
 #include "gui.h"
+#include "snakeclient.h"
 #include "grid.h"
 #include "player.h"
 #include "powerups.h"
 
 #define FRAMETIME 0.125f;
+#define WIDTH 1300
+#define HEIGHT 1030
 
-int __stdcall wWinMain(
-	_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPWSTR lpCmdLine,
-	_In_ int nShowCmd
-)
+int main()
 {
+	bool mainLoop = true;
+
 	// Start creating game
 	std::unordered_map<uint32_t, Player> players;
 	std::vector<Powerup> powerups;
 
 	// Create grid
-	Grid grid = Grid(40, 30, 30, players, powerups);
+	Grid grid = Grid(40, 30, 30, &mainLoop, WIDTH, HEIGHT, players, powerups);
 
 	// Frame timer
 	float nextFrame = 0.0f;
@@ -48,8 +46,11 @@ int __stdcall wWinMain(
 
 
 
-
-
+	// Create GUI
+	Gui gui;
+	GLFWwindow* window = gui.Init(WIDTH, HEIGHT, "Snake Battle Royale");
+	if (!window)
+		return 1;
 
 	// Create client instance and connect to server
 	SnakeClient client;
@@ -58,13 +59,11 @@ int __stdcall wWinMain(
 	while (!client.IsConnected())
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-	// Create GUI
-	gui::Init("Snake Battle Royale", "Snake Battle Royale Class");
-
-	while (gui::exit)
+	while (mainLoop)
 	{
-
 		/* --------------- GAME LOOP --------------- */
+		glfwPollEvents(); // CALLBACKS HERE FOR CLICK EVENTS ETC.
+
 		client.HandleMessages();
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -90,17 +89,20 @@ int __stdcall wWinMain(
 				}
 			}
 		}
-		
+
 
 		// Update screen
-		gui::BeginRender();
+		gui.NewFrame();
+		// THIS IS WHERE DRAWING SHOULD BE HAPPENING
+		//gui.Update();
 		grid.Render();
-		//gui::Render(); // RENDERS DEMO GUI
-		gui::EndRender();
+
+		gui.Render();
+		glfwSwapBuffers(window);
 	}
 
 	// Destroy GUI
-	gui::Destroy();
+	gui.Shutdown();
 
 	// Disconnect from server
 	client.Disconnect();

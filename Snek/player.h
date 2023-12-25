@@ -2,7 +2,7 @@
 
 #include <deque>
 
-#include "imgui\imgui.h"
+#include "imgui.h"
 
 // Forward declare Grid
 class Grid;

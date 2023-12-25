@@ -1,17 +1,19 @@
 #include <vector>
 #include <unordered_map>
 
-#include "imgui\imgui.h"
+#include "imgui.h"
 
 #include "grid.h"
-#include "gui.h"
 #include "powerups.h"
 
-Grid::Grid(int _cols, int _rows, int _size, std::unordered_map<uint32_t, Player>& _players, std::vector<Powerup>& _powerups)
-	: cols(_cols), rows(_rows), size(_size), players(_players), powerups(_powerups)
+Grid::Grid(int _cols, int _rows, int _size, bool* _mainLoop, int sWidth, int sHeight, std::unordered_map<uint32_t, Player>& _players, std::vector<Powerup>& _powerups)
+	: cols(_cols), rows(_rows), size(_size), mainLoop(_mainLoop), players(_players), powerups(_powerups)
 {
-	startX = gui::WIDTH / 2 - size * (cols + 0) / 2;
-	startY = gui::HEIGHT / 2 - size * (rows + 0) / 2 + 15;
+	//startX = gui::WIDTH / 2 - size * (cols + 0) / 2;
+	//startY = gui::HEIGHT / 2 - size * (rows + 0) / 2 + 15;
+
+	startX = sWidth / 2 - size * (cols + 0) / 2;
+	startY = sHeight / 2 - size * (rows + 0) / 2 + 15;
 
 	width = cols * size + 100;
 	height = rows * size + 130;
@@ -92,7 +94,7 @@ void Grid::RenderFrame()
 	ImGui::SetNextWindowSize({ (float)width, (float)height });
 	ImGui::Begin(
 		"SnakeBattleRoyale",
-		&gui::exit,
+		mainLoop,
 		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoSavedSettings |
 		ImGuiWindowFlags_NoCollapse |

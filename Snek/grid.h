@@ -3,7 +3,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "imgui\imgui.h"
+#include "imgui.h"
 
 #include "player.h"
 #include "powerups.h"
@@ -11,7 +11,7 @@
 class Grid
 {
 public:
-	Grid(int _rows, int _cols, int _size, std::unordered_map<uint32_t, Player>& _players, std::vector<Powerup>& _powerups);
+	Grid(int _rows, int _cols, int _size, bool* _mainLoop, int sWidth, int sHeight, std::unordered_map<uint32_t, Player>& _players, std::vector<Powerup>& _powerups);
 
 	void Render();
 
@@ -28,6 +28,7 @@ private:
 private:
 	int rows, cols, size;
 	int startX, startY, width, height;
+	bool* mainLoop;
 
 	std::unordered_map<uint32_t, Player>& players;
 

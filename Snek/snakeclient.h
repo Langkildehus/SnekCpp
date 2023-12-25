@@ -1,7 +1,6 @@
 #pragma once
 
 #include "..\Networking\networking.h"
-
 #include "common.h"
 
 class SnakeClient : public net::ClientInterface<MessageTypes>

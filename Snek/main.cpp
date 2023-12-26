@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 // Library imports
-#include "glfw3.h"
+#include <GLFW\glfw3.h>
 
 // Networking imports
 #include "..\Networking\networking.h"
@@ -24,12 +24,12 @@ int main()
 {
 	bool mainLoop = true;
 
-	// Start creating game
+	// Start creating local game
 	std::unordered_map<uint32_t, Player> players;
 	std::vector<Powerup> powerups;
 
 	// Create grid
-	Grid grid = Grid(40, 30, 30, &mainLoop, WIDTH, HEIGHT, players, powerups);
+	Grid grid = Grid(GRIDWIDTH, GRIDHEIGHT, 30, &mainLoop, WIDTH, HEIGHT, players, powerups);
 
 	// Frame timer
 	float nextFrame = 0.0f;
@@ -90,11 +90,9 @@ int main()
 			}
 		}
 
-
 		// Update screen
 		gui.NewFrame();
 		// THIS IS WHERE DRAWING SHOULD BE HAPPENING
-		//gui.Update();
 		grid.Render();
 
 		gui.Render();

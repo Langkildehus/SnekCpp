@@ -1,8 +1,10 @@
 #include <iostream>
-#include "server.h"
+#include <vector>
 
 #include "..\Networking\networking.h"
 #include "..\Snek\common.h"
+
+#include "server.h"
 
 int main()
 {

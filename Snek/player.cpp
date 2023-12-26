@@ -1,12 +1,12 @@
 #include <vector>
 
-#include "imgui.h"
+#include <imgui.h>
 
 #include "player.h"
 #include "grid.h"
 
 Player::Player(int x, int y, Grid* _grid)
-	: grid(_grid)
+	: grid(_grid), direction(Direction::Up)
 {
 	// Create head
 	tail.emplace_front(x, y);

@@ -2,7 +2,7 @@
 
 #include <deque>
 
-#include "imgui.h"
+#include <imgui.h>
 
 // Forward declare Grid
 class Grid;
@@ -18,6 +18,13 @@ enum class Direction
 struct Position
 {
 	int x, y;
+};
+
+struct PlayerData
+{
+	Direction direction;
+	std::deque<Position> tail;
+	ImU32 color;
 };
 
 class Player
@@ -42,7 +49,7 @@ public:
 private:
 	int food = 0;
 
-	Direction direction = Direction::Up;
+	Direction direction;
 
 	Grid* grid;
 

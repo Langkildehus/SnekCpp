@@ -1,8 +1,13 @@
 #pragma once
 
-#include "imgui.h"
+#include <imgui.h>
 
 #include "player.h"
+
+struct PowerupData
+{
+	int x, y;
+};
 
 class Powerup
 {

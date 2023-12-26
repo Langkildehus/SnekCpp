@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Core.h"
 #include "queue.h"
 #include "message.h"
@@ -36,6 +38,11 @@ namespace net
 		uint32_t GetID() const
 		{
 			return id;
+		}
+
+		std::string GetIP() const
+		{
+			return m_socket.remote_endpoint().address().to_string();
 		}
 
 		// Connect server to client

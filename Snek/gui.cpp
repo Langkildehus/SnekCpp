@@ -1,5 +1,5 @@
-#include "glad\glad.h"
-#include "glfw3.h"
+#include <glad\glad.h>
+#include <GLFW\glfw3.h>
 
 #include "gui.h"
 
@@ -47,7 +47,7 @@ void Gui::NewFrame()
 	ImGui::NewFrame();
 }
 
-void Gui::Update()
+/*void Gui::Update()
 {
 	// Create ImGui DrawData
 	ImGui::Begin("BEGIN FROM IMGUI");
@@ -55,7 +55,7 @@ void Gui::Update()
 	ImGui::Text("Application average %.3f msg/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	ImGui::End();
-}
+}*/
 
 void Gui::Render()
 {

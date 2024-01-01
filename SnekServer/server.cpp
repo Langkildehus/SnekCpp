@@ -44,10 +44,9 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 	players[client->GetID()] = player;
 
-	// Send ID & game state to new client
+	// Send game state to new client
 	net::Message<MessageTypes> msgState;
 	msgState.header.id = MessageTypes::ServerValidation;
-	msgState << client->GetID();
 
 	// Add players to msg
 	for (std::pair<const uint32_t, PlayerData>& otherPlayer : players)
@@ -64,6 +63,8 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 		msgState << powerup;
 	msgState << powerups.size();
 
+	// Push ID to the top of the stack
+	msgState << client->GetID();
 	client->Send(msgState);
 
 
@@ -97,7 +98,7 @@ void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> c
 	players.erase(client->GetID());
 
 	// HANDLE COLORS FOR PLAYERS
-	// SEND GAMESTATE OF PLAYRES&POWERUPS ON CONNECTION
+	// SEND GAMESTATE OF PLAYERS&POWERUPS ON CONNECTION
 }
 
 void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, net::Message<MessageTypes>& msg)

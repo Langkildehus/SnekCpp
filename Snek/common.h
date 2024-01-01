@@ -1,7 +1,7 @@
 #pragma once
 
 // IP and PORT to host and connect to
-#define IP "172.0.0.1"
+#define IP "127.0.0.1"
 #define PORT 8080
 
 // Grid

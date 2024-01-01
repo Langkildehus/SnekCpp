@@ -21,7 +21,7 @@ namespace net
 		{
 			try
 			{
-				// Resolve host - allows for doman names as well as ips
+				// Resolve host - allows for domain names as well as ip's
 				asio::ip::tcp::resolver resolver(m_context);
 				asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, std::to_string(port));
 
@@ -46,6 +46,8 @@ namespace net
 				// Connection failed
 				return false;
 			}
+
+			std::cout << "Connection successful\n";
 
 			// Connection successful
 			return true;

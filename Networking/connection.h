@@ -73,9 +73,11 @@ namespace net
 			asio::async_connect(m_socket, endpoints,
 				[this](std::error_code ec, asio::ip::tcp::endpoint endpoint)
 				{
-					// Ignore errors
+					// Handle errors
 					if (ec)
-						return;
+					{
+						std::cout << "ConnectToServerError\n" << ec.message() << "\n";
+					}
 
 					// Get and handle validation parameter from server
 					ReadValidation();
@@ -124,6 +126,9 @@ namespace net
 		// ASIO
 		void ReadHeader()
 		{
+			if (m_ownerType == owner::client)
+				std::cout << "READING HEADER\n";
+
 			// Read header from incoming message
 			asio::async_read(m_socket, asio::buffer(&m_msgTemporaryIn.header, sizeof(MessageHeader<T>)),
 				[this](std::error_code ec, std::size_t length)
@@ -131,11 +136,7 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						if (m_ownerType == owner::server)
-						{
-							std::cout << "[" << id << "] Read header failed!\n";
-							std::cout << ec.message() << "\n";
-						}
+						std::cout << "[" << id << "] Read header failed!\n" << ec.message() << "\n";
 
 						m_socket.close();
 						return;
@@ -166,11 +167,7 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						if (m_ownerType == owner::server)
-						{
-							std::cout << "[" << id << "] Read body failed!\n";
-							std::cout << ec.message() << "\n";
-						}
+						std::cout << "[" << id << "] Read body failed!\n" << ec.message() << "\n";
 
 						m_socket.close();
 						return;
@@ -282,10 +279,10 @@ namespace net
 						return;
 					}
 
-					if (m_ownerType != owner::client)
-						return;
+					if (m_ownerType == owner::client)
+						std::cout << "Validation msg sent\n";
 
-					// Since this is running server sided, start listening for incoming response
+					// Start listening for incoming response
 					ReadHeader();
 				});
 		}
@@ -296,11 +293,14 @@ namespace net
 			asio::async_read(m_socket, asio::buffer(&m_handshakeIn, sizeof(uint64_t)),
 				[this, server](std::error_code ec, std::size_t length)
 				{
-					if (!ec)
+					if (ec)
 					{
 						// If an error occurs, close socket and return
 						if (m_ownerType == owner::server)
 							std::cout << "Client banned! (ReadValidation FAILED)\n";
+						else
+							std::cout << "ReadValidation FAILED!\n";
+						std::cout << ec.message() << "\n";
 
 						m_socket.close();
 						return;

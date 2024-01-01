@@ -23,6 +23,7 @@
 int main()
 {
 	bool mainLoop = true;
+	int clientID = -1;
 
 	// Start creating local game
 	std::unordered_map<uint32_t, Player> players;
@@ -38,11 +39,13 @@ int main()
 
 
 	// TESTING VARS
+	/*
 	players[0] = Player(34, 5, &grid);
 	players[0].SetDirection(Direction::Left);
 
 	ImU32 color = ImColor(1.0f, 0.1f, 0.1f, 1.0f);
 	powerups.push_back(Powerup(5, 5, color));
+	*/
 
 
 
@@ -53,16 +56,31 @@ int main()
 		return 1;
 
 	// Create client instance and connect to server
-	SnakeClient client;
+	SnakeClient client = SnakeClient(clientID);
 	client.Connect(IP, PORT);
 
 	while (!client.IsConnected())
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-	while (mainLoop)
+	while (clientID < 0 && !glfwWindowShouldClose(window))
+	{
+		/* --------- WAITING FOR CONNECTION -------- */
+		glfwPollEvents();
+		client.HandleMessages();
+
+		// Update screen
+		gui.NewFrame();
+		// THIS IS WHERE DRAWING SHOULD BE HAPPENING
+		grid.Render();
+
+		gui.Render();
+		glfwSwapBuffers(window);
+	}
+
+	while (mainLoop && !glfwWindowShouldClose(window))
 	{
 		/* --------------- GAME LOOP --------------- */
-		glfwPollEvents(); // CALLBACKS HERE FOR CLICK EVENTS ETC.
+		glfwPollEvents();
 
 		client.HandleMessages();
 

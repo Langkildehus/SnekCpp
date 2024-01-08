@@ -112,6 +112,7 @@ namespace net
 				{
 					// Check if message queue is empty
 					bool writingMessage = !m_qMessagesOut.IsEmpty();
+					std::cout << "Currently sending: " << writingMessage << "\n";
 
 					// Save msg to send
 					m_qMessagesOut.PushBack(msg);
@@ -119,6 +120,8 @@ namespace net
 					// If we are not already in the middle of sending messages, start sending
 					if (!writingMessage)
 						WriteHeader();
+					if (!writingMessage)
+						std::cout << "Started sending thread\n";
 				});
 		}
 
@@ -126,8 +129,7 @@ namespace net
 		// ASIO
 		void ReadHeader()
 		{
-			if (m_ownerType == owner::client)
-				std::cout << "READING HEADER\n";
+			std::cout << "READING HEADER\n";
 
 			// Read header from incoming message
 			asio::async_read(m_socket, asio::buffer(&m_msgTemporaryIn.header, sizeof(MessageHeader<T>)),
@@ -151,6 +153,7 @@ namespace net
 					}
 					else
 					{
+						std::cout << "Done reading header\n";
 						// No body is attached, save message as header only
 						AddToIncomingMessageQueue();
 					}
@@ -174,6 +177,7 @@ namespace net
 					}
 
 					// Save message with the body attached
+					std::cout << "Done reading body\n";
 					AddToIncomingMessageQueue();
 				});
 		}

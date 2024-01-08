@@ -19,7 +19,7 @@ void SnakeClient::UpdateServer()
 	// Send tail
 	Player& player = players[clientID];
 	
-	for (Position pos : player.tail)
+	for (Position& pos : player.tail)
 	{
 		msg << pos;
 	}

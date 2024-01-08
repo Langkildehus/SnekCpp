@@ -10,6 +10,13 @@
 
 #include "server.h"
 
+
+
+
+
+
+#include <deque>
+
 Server::Server(int port) : net::ServerInterface<MessageTypes>(port)
 {
 	GenerateGrid();
@@ -102,7 +109,7 @@ void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> c
 
 void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, net::Message<MessageTypes>& msg)
 {
-	std::cout << "MSG RECEIVED\n";
+	std::cout << "MSG RECEIVED:" << static_cast<std::underlying_type<MessageTypes>::type>(msg.header.id) << "\n";
 
 	switch (msg.header.id)
 	{
@@ -125,18 +132,25 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 		std::cout << "[" << client->GetID() << "]: Update player position\n";
 
 		// Update all other clients
-		MessageAllClients(msg, client);
+		//MessageAllClients(msg, client);
+
+		int _clientID;
+		msg >> _clientID;
+
+		std::cout << "Received clientID: " << _clientID << "\n";
 
 		// Delete tail locally
 		PlayerData& player = players.at(client->GetID());
 		player.tail.clear();
 
 		// Get tail length
-		size_t length;
-		msg >> length;
+		size_t tailLength;
+		msg >> tailLength;
+
+		std::cout << "TailLength: " << tailLength << "\n";
 
 		// Update tail locally
-		for (int c = 0; c < length; c++)
+		for (unsigned int c = 0; c < 1; c++)//tailLength; c++)
 		{
 			Position pos;
 			msg >> pos;
@@ -145,6 +159,15 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 			std::cout << "x: " << pos.x << ", y: " << pos.y << "\n";
 			player.tail.emplace_front(pos.x, pos.y);
 		}
+		break;
+	}
+
+	default:
+	{
+		std::cout << "----------------------------------------------------------\n";
+		std::cout << "Msg type:" << (uint32_t)msg.header.id << "\n";
+		std::cout << "Unhandled msg received!\n";
+
 		break;
 	}
 	}

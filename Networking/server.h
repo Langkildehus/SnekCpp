@@ -70,15 +70,14 @@ namespace net
 						std::cout << "[SERVER] New connection: " << socket.remote_endpoint() << "\n";
 
 						// Create pointer to new connection
-						std::shared_ptr<Connection<T>> conn =
-							std::make_shared<Connection<T>>(
-								Connection<T>::owner::server,
-								m_context,
-								std::move(socket),
-								m_qMessagesIn
-							);
+						std::shared_ptr<Connection<T>> conn = std::make_shared<Connection<T>>(
+							Connection<T>::owner::server,
+							m_context,
+							std::move(socket),
+							m_qMessagesIn
+						);
 
-						// OVERRIDE - check if client is allowed
+						// USER OVERRIDEN FUNCTION - check if client is allowed
 						if (OnClientConnect(conn))
 						{
 							// Save connection and allow connection

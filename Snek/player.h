@@ -39,6 +39,7 @@ public:
 
 	Position& GetHead();
 	ImU32 GetColor();
+	Direction GetDirection();
 
 private:
 	void UpdateTail();

@@ -26,13 +26,16 @@ namespace net
 			: m_ownerType(parent), m_context(context), m_socket(std::move(socket)), m_qMessagesIn(qIn)
 		{
 			if (m_ownerType != owner::server)
-			{
 				return;
-			}
 
-			// Since this isa a server sided connection, create random handshake parameter to validate client later
+			// Since this is a server sided connection, create random handshake parameter to validate client later
 			m_handshakeOut = uint64_t(std::chrono::system_clock::now().time_since_epoch().count());
 			m_handshakeCheck = Scramble(m_handshakeOut);
+		}
+
+		virtual ~Connection()
+		{
+
 		}
 
 		uint32_t GetID() const
@@ -49,9 +52,7 @@ namespace net
 		void ConnectToClient(net::ServerInterface<T>* server, uint32_t uid = 0)
 		{
 			if ((m_ownerType != owner::server) || !m_socket.is_open())
-			{
 				return;
-			}
 
 			// Since it's server sided, save id
 			id = uid;
@@ -75,9 +76,9 @@ namespace net
 				{
 					// Handle errors
 					if (ec)
-					{
 						std::cout << "ConnectToServerError\n" << ec.message() << "\n";
-					}
+					else
+						std::cout << "Connection established\n";
 
 					// Get and handle validation parameter from server
 					ReadValidation();
@@ -112,7 +113,6 @@ namespace net
 				{
 					// Check if message queue is empty
 					bool writingMessage = !m_qMessagesOut.IsEmpty();
-					std::cout << "Currently sending: " << writingMessage << "\n";
 
 					// Save msg to send
 					m_qMessagesOut.PushBack(msg);
@@ -120,8 +120,6 @@ namespace net
 					// If we are not already in the middle of sending messages, start sending
 					if (!writingMessage)
 						WriteHeader();
-					if (!writingMessage)
-						std::cout << "Started sending thread\n";
 				});
 		}
 
@@ -129,8 +127,6 @@ namespace net
 		// ASIO
 		void ReadHeader()
 		{
-			std::cout << "READING HEADER\n";
-
 			// Read header from incoming message
 			asio::async_read(m_socket, asio::buffer(&m_msgTemporaryIn.header, sizeof(MessageHeader<T>)),
 				[this](std::error_code ec, std::size_t length)
@@ -153,7 +149,6 @@ namespace net
 					}
 					else
 					{
-						std::cout << "Done reading header\n";
 						// No body is attached, save message as header only
 						AddToIncomingMessageQueue();
 					}
@@ -177,7 +172,6 @@ namespace net
 					}
 
 					// Save message with the body attached
-					std::cout << "Done reading body\n";
 					AddToIncomingMessageQueue();
 				});
 		}
@@ -192,11 +186,8 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						if (m_ownerType == owner::server)
-						{
-							std::cout << "[" << id << "] Write header failed!\n";
-							std::cout << ec.message() << "\n";
-						}
+						std::cout << "[" << id << "] Write header failed!\n";
+						std::cout << ec.message() << "\n";
 
 						m_socket.close();
 						return;
@@ -230,11 +221,9 @@ namespace net
 					if (ec)
 					{
 						// If an error occurs, close socket and return
-						if (m_ownerType == owner::server)
-						{
-							std::cout << "[" << id << "] Write body failed!\n";
-							std::cout << ec.message() << "\n";
-						}
+						std::cout << "[" << id << "] Write body failed!\n";
+						std::cout << ec.message() << "\n";
+
 						m_socket.close();
 						return;
 					}
@@ -301,7 +290,7 @@ namespace net
 					{
 						// If an error occurs, close socket and return
 						if (m_ownerType == owner::server)
-							std::cout << "Client banned! (ReadValidation FAILED)\n";
+							std::cout << "Client rejected! (ReadValidation FAILED)\n";
 						else
 							std::cout << "ReadValidation FAILED!\n";
 						std::cout << ec.message() << "\n";

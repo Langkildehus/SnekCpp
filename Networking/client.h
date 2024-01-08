@@ -47,8 +47,6 @@ namespace net
 				return false;
 			}
 
-			std::cout << "Connection successful\n";
-
 			// Connection successful
 			return true;
 		}

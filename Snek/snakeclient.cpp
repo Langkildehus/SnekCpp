@@ -12,6 +12,18 @@ SnakeClient::SnakeClient(int& _clientID, std::vector<Powerup>& _powerups, std::u
 
 void SnakeClient::UpdateServer()
 {
+	net::Message<MessageTypes> MSG;
+	MSG.header.id = MessageTypes::MESSAGE;
+
+	int text = 69420;
+	int idk = 8080;
+
+	MSG << text;
+	MSG << idk;
+	MSG << clientID;
+
+	Send(MSG);
+
 	// Updates server with position information
 	net::Message<MessageTypes> msg;
 	msg.header.id = MessageTypes::UpdatePlayer;
@@ -28,7 +40,7 @@ void SnakeClient::UpdateServer()
 
 	// Push ID on top of stack
 	msg << clientID;
-	Send(msg);
+	//Send(msg);
 }
 
 void SnakeClient::HandleMessages()
@@ -145,6 +157,19 @@ void SnakeClient::HandleMessages()
 				updatePlayer.tail.push_front(pos);
 			}
 
+			break;
+		}
+
+		case MessageTypes::PowerupEaten:
+		{
+			std::cout << "PowerupEaten received but not handled\n";
+
+			break;
+		}
+		
+		default:
+		{
+			std::cout << "Unhandled msg!!!\n";
 			break;
 		}
 		}

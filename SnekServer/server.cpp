@@ -71,7 +71,7 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 	// Push ID to the top of the stack
 	msgState << client->GetID();
-	client->Send(msgState);
+	//client->Send(msgState);
 
 
 	// Update all other clients
@@ -84,10 +84,10 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 	msg << client->GetID();
 
-	MessageAllClients(msg, client);
+	/*MessageAllClients(msg, client);
 
 	if (players.size() % 2 != 0)
-		GeneratePowerup();
+		GeneratePowerup();*/
 }
 
 void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> client)
@@ -109,10 +109,25 @@ void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> c
 
 void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, net::Message<MessageTypes>& msg)
 {
-	std::cout << "MSG RECEIVED:" << static_cast<std::underlying_type<MessageTypes>::type>(msg.header.id) << "\n";
+	std::cout << "MSG RECEIVED: " << static_cast<std::underlying_type<MessageTypes>::type>(msg.header.id) << "\n";
 
 	switch (msg.header.id)
 	{
+	case MessageTypes::MESSAGE:
+	{
+		int ID, idk, clientIDGamin;
+		msg >> ID;
+		msg >> idk;
+		msg >> clientIDGamin;
+
+		std::cout << "---[" << ID << " " << idk << " " << clientIDGamin << "]---\n";
+
+		break;
+	}
+
+
+
+
 	case MessageTypes::PowerupEaten:
 	{
 		std::cout << "[" << client->GetID() << "]: Ate powerup\n";

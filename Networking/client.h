@@ -77,7 +77,10 @@ namespace net
 		void Send(const Message<T>& msg)
 		{
 			if (!IsConnected())
+			{
+				std::cout << "FAILED TO SEND MSG!\n";
 				return;
+			}
 
 			m_connection->Send(msg);
 		}

@@ -17,7 +17,7 @@
 #include "powerups.h"
 #include "inputhandler.h"
 
-#define FRAMETIME 0.125f;
+#define FRAMETIME 0.25f;
 #define WIDTH 1300
 #define HEIGHT 1030
 
@@ -70,7 +70,8 @@ int main()
 		glfwSwapBuffers(window);
 	}
 
-	std::cout << "CLIENTID RECEIVED: " << clientID << "\n";
+	if (!glfwWindowShouldClose(window))
+		std::cout << "CLIENTID RECEIVED: " << clientID << "\n";
 
 	while (mainLoop && !glfwWindowShouldClose(window))
 	{
@@ -84,28 +85,26 @@ int main()
 
 		if (nextFrame <= 0)
 		{
-			nextFrame = FRAMETIME;
+			nextFrame += FRAMETIME;
 
 			// Update all players
 			for (std::pair<const uint32_t, Player>& player : players)
-			{
 				player.second.Move();
 
-				for (unsigned int c = 0; c < powerups.size(); c++)
+			// Check collission for powerups
+			for (unsigned int c = 0; c < powerups.size(); c++)
+			{
+				if (powerups[c].CheckCollision(players[clientID].GetHead()))
 				{
-					if (powerups[c].CheckCollision(player.second.GetHead()))
-					{
-						//client.EatPowerup(powerups[c]);
-						powerups.erase(powerups.begin() + c);
-						player.second.AddLength(1);
-						break;
-					}
+					client.EatPowerup(c);
+					break;
 				}
 			}
-		}
 
-		// Update position to server
-		client.UpdateServer();
+			std::cout << "Update server\n";
+			// Update position to server
+			client.UpdateServer();
+		}
 
 		// Update screen
 		gui.NewFrame();

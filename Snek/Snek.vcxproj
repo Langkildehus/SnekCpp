@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="inputhandler.h" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="snakeclient.cpp" />
     <ClCompile Include="gui.cpp" />

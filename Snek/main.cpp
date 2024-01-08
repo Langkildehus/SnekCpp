@@ -15,18 +15,22 @@
 #include "grid.h"
 #include "player.h"
 #include "powerups.h"
+#include "inputhandler.h"
 
 #define FRAMETIME 0.125f;
 #define WIDTH 1300
 #define HEIGHT 1030
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+int clientID = -1;
+std::unordered_map<uint32_t, Player> players;
+
 int main()
 {
 	bool mainLoop = true;
-	int clientID = -1;
 
 	// Start creating local game
-	std::unordered_map<uint32_t, Player> players;
 	std::vector<Powerup> powerups;
 
 	// Create grid
@@ -34,8 +38,9 @@ int main()
 
 	// Frame timer
 	float nextFrame = 0.0f;
+	
 
-
+	//Inputhandler inputhandler = Inputhandler(clientID, players);
 
 
 	// TESTING VARS
@@ -54,6 +59,8 @@ int main()
 	GLFWwindow* window = gui.Init(WIDTH, HEIGHT, "Snake Battle Royale");
 	if (!window)
 		return 1;
+
+	glfwSetKeyCallback(window, key_callback);
 
 	// Create client instance and connect to server
 	SnakeClient client = SnakeClient(clientID, powerups, players, &grid);
@@ -126,4 +133,24 @@ int main()
 	client.Disconnect();
 
 	return 0;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if ((key == GLFW_KEY_W || key == GLFW_KEY_UP) && action == GLFW_PRESS)
+	{
+		players[clientID].SetDirection(Direction::Up);
+	}
+	if ((key == GLFW_KEY_A || key == GLFW_KEY_LEFT) && action == GLFW_PRESS)
+	{
+		players[clientID].SetDirection(Direction::Left);
+	}
+	if ((key == GLFW_KEY_S || key == GLFW_KEY_DOWN) && action == GLFW_PRESS)
+	{
+		players[clientID].SetDirection(Direction::Down);
+	}
+	if ((key == GLFW_KEY_D || key == GLFW_KEY_RIGHT) && action == GLFW_PRESS)
+	{
+		players[clientID].SetDirection(Direction::Right);
+	}
 }

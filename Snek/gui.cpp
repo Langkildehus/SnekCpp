@@ -3,6 +3,8 @@
 
 #include "gui.h"
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 GLFWwindow* Gui::Init(int _width, int _height, const char* title)
 {
 	if (!glfwInit())

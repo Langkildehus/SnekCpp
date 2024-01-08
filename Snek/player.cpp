@@ -77,6 +77,11 @@ ImU32 Player::GetColor()
 	return color;
 }
 
+Direction Player::GetDirection()
+{
+	return direction;
+}
+
 void Player::UpdateTail()
 {
 	// Remove last tail piece if no food has been eaten

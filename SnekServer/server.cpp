@@ -102,6 +102,8 @@ void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> c
 
 void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, net::Message<MessageTypes>& msg)
 {
+	std::cout << "MSG RECEIVED\n";
+
 	switch (msg.header.id)
 	{
 	case MessageTypes::PowerupEaten:
@@ -112,7 +114,7 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 		PowerupData eatenPowerup;
 		msg >> eatenPowerup;
 
-		DeletePowerup(eatenPowerup);
+		DeletePowerup(eatenPowerup, client);
 
 		GeneratePowerup();
 		break;
@@ -138,9 +140,11 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 		{
 			Position pos;
 			msg >> pos;
-			player.tail.push_back(pos);
-		}
 
+			std::cout << "Tail size after clear(): " << player.tail.size() << "\n";
+			std::cout << "x: " << pos.x << ", y: " << pos.y << "\n";
+			player.tail.emplace_front(pos.x, pos.y);
+		}
 		break;
 	}
 	}

@@ -150,3 +150,19 @@ void SnakeClient::HandleMessages()
 		}
 	}
 }
+
+void SnakeClient::EatPowerup(unsigned int c)
+{
+	// Save powerup before deleting
+	PowerupData powerupEaten = PowerupData(powerups[c].x, powerups[c].y);
+
+	// Use powerup
+	players[clientID].AddLength(1);
+	powerups.erase(powerups.begin() + c);
+
+	// Update server of eaten powerup
+	net::Message<MessageTypes> msg;
+	msg.header.id = MessageTypes::PowerupEaten;
+	msg << powerupEaten;
+	Send(msg);
+}

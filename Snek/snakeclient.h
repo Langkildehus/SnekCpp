@@ -19,6 +19,8 @@ public:
 	// Should be called every frame to handle incoming messages
 	void HandleMessages();
 
+	void EatPowerup(unsigned int c);
+
 private:
 	int& clientID;
 	std::vector<Powerup>& powerups;

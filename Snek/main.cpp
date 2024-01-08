@@ -40,20 +40,6 @@ int main()
 	float nextFrame = 0.0f;
 	
 
-	//Inputhandler inputhandler = Inputhandler(clientID, players);
-
-
-	// TESTING VARS
-	/*
-	players[0] = Player(34, 5, &grid);
-	players[0].SetDirection(Direction::Left);
-
-	ImU32 color = ImColor(1.0f, 0.1f, 0.1f, 1.0f);
-	powerups.push_back(Powerup(5, 5, color));
-	*/
-
-
-
 	// Create GUI
 	Gui gui;
 	GLFWwindow* window = gui.Init(WIDTH, HEIGHT, "Snake Battle Royale");
@@ -109,6 +95,7 @@ int main()
 				{
 					if (powerups[c].CheckCollision(player.second.GetHead()))
 					{
+						//client.EatPowerup(powerups[c]);
 						powerups.erase(powerups.begin() + c);
 						player.second.AddLength(1);
 						break;
@@ -116,6 +103,9 @@ int main()
 				}
 			}
 		}
+
+		// Update position to server
+		client.UpdateServer();
 
 		// Update screen
 		gui.NewFrame();

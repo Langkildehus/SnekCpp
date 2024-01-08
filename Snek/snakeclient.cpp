@@ -12,7 +12,23 @@ SnakeClient::SnakeClient(int& _clientID, std::vector<Powerup>& _powerups, std::u
 
 void SnakeClient::UpdateServer()
 {
-	// Should update server with position information
+	// Updates server with position information
+	net::Message<MessageTypes> msg;
+	msg.header.id = MessageTypes::UpdatePlayer;
+
+	// Send tail
+	Player& player = players[clientID];
+	
+	for (Position pos : player.tail)
+	{
+		msg << pos;
+	}
+
+	msg << player.tail.size();
+
+	// Push ID on top of stack
+	msg << clientID;
+	Send(msg);
 }
 
 void SnakeClient::HandleMessages()
@@ -104,6 +120,30 @@ void SnakeClient::HandleMessages()
 			PowerupData powerup;
 			msg >> powerup;
 			powerups.emplace_back(powerup.x, powerup.y, ImColor(1.0f, 0.1f, 0.1f, 1.0f));
+
+			break;
+		}
+
+		case MessageTypes::UpdatePlayer:
+		{
+			std::cout << "Update player position\n";
+
+			// Get player
+			int clientID;
+			msg >> clientID;
+			Player& updatePlayer = players[clientID];
+
+			updatePlayer.tail.clear();
+
+			size_t tailSize;
+			msg >> tailSize;
+
+			for (int c = 0; c < tailSize; c++)
+			{
+				Position pos;
+				msg >> pos;
+				updatePlayer.tail.push_front(pos);
+			}
 
 			break;
 		}

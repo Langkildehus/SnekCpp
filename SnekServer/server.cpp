@@ -122,30 +122,24 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 	{
 		std::cout << "[" << client->GetID() << "]: Update player position\n";
 
-		// Generate msg to other clients
-		net::Message<MessageTypes> updateMsg;
-		updateMsg.header.id = MessageTypes::UpdatePlayer;
+		// Update all other clients
+		MessageAllClients(msg, client);
 
 		// Delete tail locally
 		PlayerData& player = players.at(client->GetID());
 		player.tail.clear();
 
 		// Get tail length
-		uint32_t length;
+		size_t length;
 		msg >> length;
 
 		// Update tail locally
-		for (uint32_t c = 0; c < length; c++)
+		for (int c = 0; c < length; c++)
 		{
 			Position pos;
 			msg >> pos;
 			player.tail.push_back(pos);
 		}
-
-		// Update tale to other clients
-		AddPlayerToMsg(updateMsg, player);
-		updateMsg << client->GetID();
-		MessageAllClients(updateMsg, client);
 
 		break;
 	}

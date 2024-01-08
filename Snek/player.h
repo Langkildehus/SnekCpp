@@ -31,7 +31,7 @@ class Player
 {
 public:
 	Player() = default;
-	Player(int x, int y, Grid* _grid);
+	Player(Grid* _grid, ImU32 _color);
 
 	void Move();
 	void AddLength(int l);

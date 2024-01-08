@@ -56,7 +56,7 @@ int main()
 		return 1;
 
 	// Create client instance and connect to server
-	SnakeClient client = SnakeClient(clientID);
+	SnakeClient client = SnakeClient(clientID, powerups, players, &grid);
 	client.Connect(IP, PORT);
 
 	while (!client.IsConnected())
@@ -76,6 +76,8 @@ int main()
 		gui.Render();
 		glfwSwapBuffers(window);
 	}
+
+	std::cout << "CLIENTID RECEIVED: " << clientID << "\n";
 
 	while (mainLoop && !glfwWindowShouldClose(window))
 	{

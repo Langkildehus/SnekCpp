@@ -5,14 +5,10 @@
 #include "player.h"
 #include "grid.h"
 
-Player::Player(int x, int y, Grid* _grid)
-	: grid(_grid), direction(Direction::Up)
+Player::Player(Grid* _grid, ImU32 _color)
+	: grid(_grid), direction(Direction::Up), color(_color)
 {
-	// Create head
-	tail.emplace_front(x, y);
 
-	// Set snake color
-	color = ImColor(0.1f, 0.1f, 1.0f, 1.0f);
 }
 
 void Player::Move()

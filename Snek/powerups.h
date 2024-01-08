@@ -12,6 +12,7 @@ struct PowerupData
 class Powerup
 {
 public:
+	Powerup() = default;
 	Powerup(int _x, int _y, ImU32 _color);
 
 	bool CheckCollision(Position& pos);

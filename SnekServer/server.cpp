@@ -4,8 +4,6 @@
 #include <unordered_map>
 #include <random>
 
-//#include <imgui.h>
-
 #include "..\Snek\common.h"
 #include "..\Snek\player.h"
 #include "..\Snek\powerups.h"
@@ -57,6 +55,7 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 		msgState << otherPlayer.first;
 	}
 	msgState << players.size();
+	std::cout << "Players size: " << players.size() << "\n";
 
 	// Add powerups to msg
 	for (PowerupData powerup : powerups)
@@ -78,7 +77,7 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 	msg << client->GetID();
 
-	MessageAllClients(msg);
+	MessageAllClients(msg, client);
 
 	if (players.size() % 2 != 0)
 		GeneratePowerup();
@@ -176,9 +175,15 @@ void Server::DeletePowerup(PowerupData powerup, std::shared_ptr<net::Connection<
 void Server::GeneratePowerup()
 {
 	// Generate new powerup position
-	std::vector<Position> freeGrid(GRIDWIDTH * GRIDHEIGHT);
+	std::vector<Position> freeGrid;
 	GetFreeGrid(freeGrid);
-	Position spawnPos = freeGrid[rand() % freeGrid.size()];
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> distribution(0, (int)freeGrid.size() - 1);
+
+	// Generate new powerup position
+	Position spawnPos = freeGrid[distribution(gen)];
 
 	// Generate powerup
 	PowerupData powerup{ spawnPos.x, spawnPos.y };
@@ -194,24 +199,22 @@ void Server::GeneratePowerup()
 
 void Server::GetFreeGrid(std::vector<Position>& freeGrid)
 {
-	int freeGridArray[GRIDWIDTH][GRIDHEIGHT] = { 1 };
+	int freeGridArray[GRIDWIDTH][GRIDHEIGHT] = { };
 
 	for (std::pair<const uint32_t, PlayerData>& player : players)
 	{
 		for (Position pos : player.second.tail)
-			freeGridArray[pos.x][pos.y] = 0;
+			freeGridArray[pos.x][pos.y] = 1;
 	}
 
 	for (PowerupData& powerup : powerups)
-	{
-		freeGridArray[powerup.x][powerup.y] = 0;
-	}
+		freeGridArray[powerup.x][powerup.y] = 1;
 
 	for (int x = 0; x < GRIDWIDTH; x++)
 	{
 		for (int y = 0; y < GRIDHEIGHT; y++)
 		{
-			if (freeGridArray[x][y] == 1)
+			if (freeGridArray[x][y] == 0)
 				freeGrid.emplace_back(x, y);
 		}
 	}
@@ -229,12 +232,12 @@ void Server::GenerateGrid()
 void Server::GenerateSpawnpoints()
 {
 	spawnpoints = std::vector<Position>(6);
-	spawnpoints.emplace_back(Position(GRIDWIDTH / 4,		GRIDHEIGHT / 3));
-	spawnpoints.emplace_back(Position(2 * GRIDWIDTH / 4,	GRIDHEIGHT / 3));
-	spawnpoints.emplace_back(Position(3 * GRIDWIDTH / 4,	GRIDHEIGHT / 3));
-	spawnpoints.emplace_back(Position(GRIDWIDTH / 4,		2 * GRIDHEIGHT / 3));
-	spawnpoints.emplace_back(Position(2 * GRIDWIDTH / 4,	2 * GRIDHEIGHT / 3));
-	spawnpoints.emplace_back(Position(3 * GRIDWIDTH / 4,	2 * GRIDHEIGHT / 3));
+	spawnpoints.emplace_back(GRIDWIDTH / 4,		GRIDHEIGHT / 3);
+	spawnpoints.emplace_back(2 * GRIDWIDTH / 4,	GRIDHEIGHT / 3);
+	spawnpoints.emplace_back(3 * GRIDWIDTH / 4,	GRIDHEIGHT / 3);
+	spawnpoints.emplace_back(GRIDWIDTH / 4,		2 * GRIDHEIGHT / 3);
+	spawnpoints.emplace_back(2 * GRIDWIDTH / 4,	2 * GRIDHEIGHT / 3);
+	spawnpoints.emplace_back(3 * GRIDWIDTH / 4,	2 * GRIDHEIGHT / 3);
 }
 
 void Server::AddPlayerToMsg(net::Message<MessageTypes>& msg, PlayerData& player)

@@ -10,13 +10,6 @@
 
 #include "server.h"
 
-
-
-
-
-
-#include <deque>
-
 Server::Server(int port) : net::ServerInterface<MessageTypes>(port)
 {
 	GenerateGrid();
@@ -29,7 +22,9 @@ bool Server::OnClientConnect(std::shared_ptr<net::Connection<MessageTypes>> clie
 	std::cout << "New connection received from: " << client->GetIP() << "\n";
 
 	if (spawnpoints.size() > 0)
+	{
 		return true;
+	}
 
 	std::cout << "No more spawnpoints available!\n";
 	return false;
@@ -66,12 +61,14 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 	// Add powerups to msg
 	for (PowerupData powerup : powerups)
+	{
 		msgState << powerup;
+	}
 	msgState << powerups.size();
 
 	// Push ID to the top of the stack
 	msgState << client->GetID();
-	//client->Send(msgState);
+	client->Send(msgState);
 
 
 	// Update all other clients
@@ -84,10 +81,12 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 	msg << client->GetID();
 
-	/*MessageAllClients(msg, client);
+	MessageAllClients(msg, client);
 
 	if (players.size() % 2 != 0)
-		GeneratePowerup();*/
+	{
+		GeneratePowerup();
+	}
 }
 
 void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> client)
@@ -113,21 +112,6 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 
 	switch (msg.header.id)
 	{
-	case MessageTypes::MESSAGE:
-	{
-		int ID, idk, clientIDGamin;
-		msg >> ID;
-		msg >> idk;
-		msg >> clientIDGamin;
-
-		std::cout << "---[" << ID << " " << idk << " " << clientIDGamin << "]---\n";
-
-		break;
-	}
-
-
-
-
 	case MessageTypes::PowerupEaten:
 	{
 		std::cout << "[" << client->GetID() << "]: Ate powerup\n";
@@ -147,7 +131,7 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 		std::cout << "[" << client->GetID() << "]: Update player position\n";
 
 		// Update all other clients
-		//MessageAllClients(msg, client);
+		MessageAllClients(msg, client);
 
 		int _clientID;
 		msg >> _clientID;
@@ -240,18 +224,24 @@ void Server::GetFreeGrid(std::vector<Position>& freeGrid)
 	for (std::pair<const uint32_t, PlayerData>& player : players)
 	{
 		for (Position pos : player.second.tail)
+		{
 			freeGridArray[pos.x][pos.y] = 1;
+		}
 	}
 
 	for (PowerupData& powerup : powerups)
+	{
 		freeGridArray[powerup.x][powerup.y] = 1;
+	}
 
 	for (int x = 0; x < GRIDWIDTH; x++)
 	{
 		for (int y = 0; y < GRIDHEIGHT; y++)
 		{
 			if (freeGridArray[x][y] == 0)
+			{
 				freeGrid.emplace_back(x, y);
+			}
 		}
 	}
 }
@@ -261,7 +251,9 @@ void Server::GenerateGrid()
 	for (int x = 0; x < GRIDWIDTH; x++)
 	{
 		for (int y = 0; y < GRIDHEIGHT; y++)
+		{
 			grid.emplace_back(x, y);
+		}
 	}
 }
 
@@ -279,7 +271,9 @@ void Server::GenerateSpawnpoints()
 void Server::AddPlayerToMsg(net::Message<MessageTypes>& msg, PlayerData& player)
 {
 	for (Position pos : player.tail)
+	{
 		msg << pos;
+	}
 
 	// Add tail size to top of stack
 	msg << player.tail.size();

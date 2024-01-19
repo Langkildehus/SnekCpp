@@ -54,12 +54,16 @@ namespace net
 		void Disconnect()
 		{
 			if (IsConnected())
+			{
 				m_connection->Disconnect();
+			}
 
 			// Stop asio context & wait for thread termination
 			m_context.stop();
 			if (contextThread.joinable())
+			{
 				contextThread.join();
+			}
 
 			m_connection.release();
 		}
@@ -67,7 +71,9 @@ namespace net
 		bool IsConnected() const
 		{
 			if (m_connection)
+			{
 				return m_connection->IsConnected();
+			}
 
 			return false;
 		}

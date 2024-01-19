@@ -33,10 +33,7 @@ namespace net
 			m_handshakeCheck = Scramble(m_handshakeOut);
 		}
 
-		virtual ~Connection()
-		{
-
-		}
+		virtual ~Connection() {}
 
 		uint32_t GetID() const
 		{
@@ -52,7 +49,9 @@ namespace net
 		void ConnectToClient(net::ServerInterface<T>* server, uint32_t uid = 0)
 		{
 			if ((m_ownerType != owner::server) || !m_socket.is_open())
+			{
 				return;
+			}
 
 			// Since it's server sided, save id
 			id = uid;
@@ -76,9 +75,13 @@ namespace net
 				{
 					// Handle errors
 					if (ec)
+					{
 						std::cout << "ConnectToServerError\n" << ec.message() << "\n";
+					}
 					else
+					{
 						std::cout << "Connection established\n";
+					}
 
 					// Get and handle validation parameter from server
 					ReadValidation();
@@ -88,7 +91,9 @@ namespace net
 		void Disconnect()
 		{
 			if (!IsConnected())
+			{
 				return;
+			}
 
 			// Since there is a connection, tell asio to close it
 			asio::post(m_context,
@@ -119,7 +124,9 @@ namespace net
 
 					// If we are not already in the middle of sending messages, start sending
 					if (!writingMessage)
+					{
 						WriteHeader();
+					}
 				});
 		}
 
@@ -204,9 +211,11 @@ namespace net
 						// No body attached, remove outgoing message from queue
 						m_qMessagesOut.PopFront();
 
-						// Send remaining messages
 						if (!m_qMessagesOut.IsEmpty())
+						{
+							// Send remaining messages
 							WriteHeader();
+						}
 					}
 				});
 		}
@@ -231,9 +240,11 @@ namespace net
 					// Remove message from queue
 					m_qMessagesOut.PopFront();
 
-					// Send remaining messages
 					if (!m_qMessagesOut.IsEmpty())
+					{
+						// Send remaining messages
 						WriteHeader();
+					}
 				});
 		}
 
@@ -242,9 +253,13 @@ namespace net
 		{
 			// Save a received message in the queue
 			if (m_ownerType == owner::server)
+			{
 				m_qMessagesIn.PushBack({ this->shared_from_this(), m_msgTemporaryIn });
+			}
 			else
+			{
 				m_qMessagesIn.PushBack({ nullptr, m_msgTemporaryIn });
+			}
 
 			// Continue listening for new messages
 			ReadHeader();
@@ -273,10 +288,12 @@ namespace net
 					}
 
 					if (m_ownerType == owner::client)
+					{
 						std::cout << "Validation msg sent\n";
 
-					// Start listening for incoming response
-					ReadHeader();
+						// Start listening for incoming response
+						ReadHeader();
+					}
 				});
 		}
 
@@ -290,9 +307,13 @@ namespace net
 					{
 						// If an error occurs, close socket and return
 						if (m_ownerType == owner::server)
+						{
 							std::cout << "Client rejected! (ReadValidation FAILED)\n";
+						}
 						else
+						{
 							std::cout << "ReadValidation FAILED!\n";
+						}
 						std::cout << ec.message() << "\n";
 
 						m_socket.close();

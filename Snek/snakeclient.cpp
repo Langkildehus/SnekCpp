@@ -5,25 +5,10 @@
 #include "common.h"
 
 SnakeClient::SnakeClient(int& _clientID, std::vector<Powerup>& _powerups, std::unordered_map<uint32_t, Player>& _players, Grid* grid)
-	: clientID(_clientID), powerups(_powerups), players(_players), gridPointer(grid)
-{
-
-}
+	: clientID(_clientID), powerups(_powerups), players(_players), gridPointer(grid) { }
 
 void SnakeClient::UpdateServer()
 {
-	net::Message<MessageTypes> MSG;
-	MSG.header.id = MessageTypes::MESSAGE;
-
-	int text = 69420;
-	int idk = 8080;
-
-	MSG << text;
-	MSG << idk;
-	MSG << clientID;
-
-	Send(MSG);
-
 	// Updates server with position information
 	net::Message<MessageTypes> msg;
 	msg.header.id = MessageTypes::UpdatePlayer;
@@ -40,7 +25,7 @@ void SnakeClient::UpdateServer()
 
 	// Push ID on top of stack
 	msg << clientID;
-	//Send(msg);
+	Send(msg);
 }
 
 void SnakeClient::HandleMessages()

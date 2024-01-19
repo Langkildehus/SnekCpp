@@ -9,9 +9,6 @@
 Grid::Grid(int _cols, int _rows, int _size, bool* _mainLoop, int sWidth, int sHeight, std::unordered_map<uint32_t, Player>& _players, std::vector<Powerup>& _powerups)
 	: cols(_cols), rows(_rows), size(_size), mainLoop(_mainLoop), players(_players), powerups(_powerups)
 {
-	//startX = gui::WIDTH / 2 - size * (cols + 0) / 2;
-	//startY = gui::HEIGHT / 2 - size * (rows + 0) / 2 + 15;
-
 	startX = sWidth / 2 - size * (cols + 0) / 2;
 	startY = sHeight / 2 - size * (rows + 0) / 2 + 15;
 

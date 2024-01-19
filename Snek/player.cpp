@@ -6,10 +6,7 @@
 #include "grid.h"
 
 Player::Player(Grid* _grid, ImU32 _color)
-	: grid(_grid), direction(Direction::Up), color(_color)
-{
-
-}
+	: grid(_grid), direction(Direction::Up), color(_color) { }
 
 void Player::Move()
 {
@@ -21,6 +18,7 @@ void Player::Move()
 			tail[0].x,
 			((tail[0].y - 1) + (*grid).GetRowCount()) % (*grid).GetRowCount()
 		);
+
 		UpdateTail();
 	}
 	break;
@@ -31,6 +29,7 @@ void Player::Move()
 			((tail[0].x + 1) + (*grid).GetColCount()) % (*grid).GetColCount(),
 			tail[0].y
 		);
+
 		UpdateTail();
 	}
 	break;
@@ -41,6 +40,7 @@ void Player::Move()
 			tail[0].x,
 			((tail[0].y + 1) + (*grid).GetRowCount()) % (*grid).GetRowCount()
 		);
+
 		UpdateTail();
 	}
 	break;
@@ -51,6 +51,7 @@ void Player::Move()
 			((tail[0].x - 1) + (*grid).GetColCount()) % (*grid).GetColCount(),
 			tail[0].y
 		);
+
 		UpdateTail();
 	}
 	break;
@@ -86,7 +87,11 @@ void Player::UpdateTail()
 {
 	// Remove last tail piece if no food has been eaten
 	if (food > 0)
+	{
 		food--;
+	}
 	else
+	{
 		tail.pop_back();
+	}
 }

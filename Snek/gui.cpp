@@ -8,7 +8,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 GLFWwindow* Gui::Init(int _width, int _height, const char* title)
 {
 	if (!glfwInit())
+	{
 		return nullptr;
+	}
 
 	// GL 3.0 & GLSL 130
 	const char* glslVersion = "#version 130";
@@ -18,12 +20,17 @@ GLFWwindow* Gui::Init(int _width, int _height, const char* title)
 	// Create window with graphics
 	GLFWwindow* window = glfwCreateWindow(_width, _height, title, NULL, NULL);
 	if (window == NULL)
+	{
 		return nullptr;
+	}
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1); // ENABLE VSYNC
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) // Tie window context to glad's opener
+	// Tie window context to glad's opener
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
 		throw("Unable to tie GLAD to OpenGL");
+	}
 
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);

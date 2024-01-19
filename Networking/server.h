@@ -13,9 +13,7 @@ namespace net
 	public:
 		ServerInterface(uint16_t port)
 			: m_acceptor(m_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
-		{
-
-		}
+		{}
 
 		virtual ~ServerInterface()
 		{
@@ -49,7 +47,9 @@ namespace net
 
 			// Wait for thread
 			if (m_contextThread.joinable())
+			{
 				m_contextThread.join();
+			}
 
 			std::cout << "[SERVER] Stopped!\n";
 		}
@@ -135,7 +135,9 @@ namespace net
 				{
 					// Only send message to client if not ignored
 					if (client != ignoreClient)
+					{
 						client->Send(msg);
+					}
 				}
 				else
 				{
@@ -168,7 +170,9 @@ namespace net
 		{
 			// If enabled, wait until new messages arrive
 			if (wait)
+			{
 				m_qMessagesIn.Wait();
+			}
 
 			// Update a certain amount of messages, size_t is unsigned meaning default is: -1 -> very big
 			size_t messageCount = 0;

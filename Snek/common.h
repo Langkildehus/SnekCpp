@@ -11,7 +11,6 @@
 // Types of messages to be sent/received over socket
 enum class MessageTypes : uint32_t
 {
-	MESSAGE,          // Printed to receivers console
 	ServerValidation, // Server validated connection
 
 	NewPlayer,        // New player connected

@@ -130,14 +130,16 @@ namespace net
 
 			for (std::shared_ptr<Connection<T>>& client : m_deqConnections)
 			{
+				// Only send message to client if not ignored
+				if (client == ignoreClient)
+				{
+					continue;
+				}
+
 				// Check if client is connected
 				if (client && client->IsConnected())
 				{
-					// Only send message to client if not ignored
-					if (client != ignoreClient)
-					{
-						client->Send(msg);
-					}
+					client->Send(msg);
 				}
 				else
 				{

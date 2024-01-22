@@ -15,8 +15,9 @@ enum class MessageTypes : uint32_t
 
 	NewPlayer,        // New player connected
 	RemovePlayer,     // Player left
-	UpdatePlayer,     // Player data
+	StartGame,        // Starts the game
 
+	UpdatePlayer,     // Player data
 	NewPowerup,       // Send to tell clients about a new powerup
 	PowerupEaten      // Send when client eats powerup
 };

@@ -1,8 +1,4 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <random>
+#include "pch.h"
 
 #include "..\Snek\common.h"
 #include "..\Snek\player.h"
@@ -83,7 +79,8 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 	MessageAllClients(msg, client);
 
-	if (players.size() % 2 != 0)
+	int powerupCount = players.size() % 2 * players.size() / 2 + 1;
+	while (powerups.size() < powerupCount)
 	{
 		GeneratePowerup();
 	}
@@ -91,16 +88,19 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 
 void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> client)
 {
-	// Send some sort of RemovePlayer msg to all clients
+	int id = client->GetID();
+	std::cout << "Client disconnected: " << id << "\n";
+
+	// Send RemovePlayer msg to all clients
 	net::Message<MessageTypes> msg;
 	msg.header.id = MessageTypes::RemovePlayer;
-	msg << client->GetID();
+	msg << id;
 	MessageAllClients(msg, client);
 
 	// Regenerate the lost spawnpoint
 
 	// Delete player locally
-	players.erase(client->GetID());
+	players.erase(id);
 
 	// HANDLE COLORS FOR PLAYERS
 	// SEND GAMESTATE OF PLAYERS&POWERUPS ON CONNECTION
@@ -108,8 +108,6 @@ void Server::OnClientDisconnect(std::shared_ptr<net::Connection<MessageTypes>> c
 
 void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, net::Message<MessageTypes>& msg)
 {
-	std::cout << "MSG RECEIVED: " << static_cast<std::underlying_type<MessageTypes>::type>(msg.header.id) << "\n";
-
 	switch (msg.header.id)
 	{
 	case MessageTypes::PowerupEaten:
@@ -128,25 +126,21 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 
 	case MessageTypes::UpdatePlayer:
 	{
-		std::cout << "[" << client->GetID() << "]: Update player position\n";
-
 		// Update all other clients
 		MessageAllClients(msg, client);
 
 		int _clientID;
 		msg >> _clientID;
 
-		std::cout << "Received clientID: " << _clientID << "\n";
-
 		// Delete tail locally
 		PlayerData& player = players.at(client->GetID());
 		player.tail.clear();
 
+		msg >> player.direction;
+
 		// Get tail length
 		size_t tailLength;
 		msg >> tailLength;
-
-		std::cout << "TailLength: " << tailLength << "\n";
 
 		// Update tail locally
 		for (unsigned int c = 0; c < 1; c++)//tailLength; c++)
@@ -154,10 +148,15 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 			Position pos;
 			msg >> pos;
 
-			std::cout << "Tail size after clear(): " << player.tail.size() << "\n";
-			std::cout << "x: " << pos.x << ", y: " << pos.y << "\n";
 			player.tail.emplace_front(pos.x, pos.y);
 		}
+		break;
+	}
+
+	case MessageTypes::StartGame:
+	{
+		std::cout << "Game Started by" << client->GetID() << "\n";
+		MessageAllClients(msg);
 		break;
 	}
 

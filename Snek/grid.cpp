@@ -1,7 +1,4 @@
-#include <vector>
-#include <unordered_map>
-
-#include <imgui.h>
+#include "pch.h"
 
 #include "grid.h"
 #include "powerups.h"
@@ -16,12 +13,12 @@ Grid::Grid(int _cols, int _rows, int _size, bool* _mainLoop, int sWidth, int sHe
 	height = rows * size + 130;
 }
 
-int Grid::GetRowCount()
+int Grid::GetRowCount() const
 {
 	return rows;
 }
 
-int Grid::GetColCount()
+int Grid::GetColCount() const
 {
 	return cols;
 }

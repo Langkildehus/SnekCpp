@@ -1,7 +1,5 @@
-#include <iostream>
-#include <vector>
+#include "pch.h"
 
-#include "..\Networking\networking.h"
 #include "..\Snek\common.h"
 
 #include "server.h"

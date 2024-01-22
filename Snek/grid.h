@@ -1,10 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
-
-#include <imgui.h>
-
 #include "player.h"
 #include "powerups.h"
 
@@ -15,8 +10,8 @@ public:
 
 	void Render();
 
-	int GetRowCount();
-	int GetColCount();
+	int GetRowCount() const;
+	int GetColCount() const;
 
 private:
 	void DrawGrid();

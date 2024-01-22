@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="pch">
+      <UniqueIdentifier>{ee26334d-fdcb-4398-bd3e-7645fe540f0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="player.cpp">
@@ -20,9 +23,6 @@
     </ClCompile>
     <ClCompile Include="snakeclient.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui.h">
-      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="gui.cpp">
       <Filter>Source Files</Filter>
@@ -36,8 +36,11 @@
     <ClCompile Include="powerups.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="inputhandler.h">
+    <ClCompile Include="inputhandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>pch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>pch</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

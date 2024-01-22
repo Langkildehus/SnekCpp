@@ -1,7 +1,5 @@
 #pragma once
 
-#include <imgui.h>
-
 #include "player.h"
 
 struct PowerupData
@@ -16,7 +14,7 @@ public:
 	Powerup(int _x, int _y, ImU32 _color);
 
 	bool CheckCollision(Position& pos);
-	ImU32 GetColor();
+	ImU32 GetColor() const;
 
 public:
 	int x, y;

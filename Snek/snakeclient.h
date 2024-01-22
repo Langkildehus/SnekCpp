@@ -1,10 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
-
-#include "..\Networking\networking.h"
-
 #include "common.h"
 #include "powerups.h"
 #include "grid.h"
@@ -22,7 +17,14 @@ public:
 
 	void EatPowerup(unsigned int c);
 
+	// Attempts to start the game
+	void AttemptGameStart();
+
+	bool IsGameStarted() const;
+
 private:
+	bool gameStarted = false;
+
 	int& clientID;
 	std::vector<Powerup>& powerups;
 	std::unordered_map<uint32_t, Player>& players;

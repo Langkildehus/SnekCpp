@@ -13,10 +13,16 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="pch">
+      <UniqueIdentifier>{9fdde11a-70bd-45a1-992c-719f853b52f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>pch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +31,9 @@
     </ClCompile>
     <ClCompile Include="server.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>pch</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

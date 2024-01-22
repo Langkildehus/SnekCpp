@@ -1,4 +1,4 @@
-#include <imgui.h>
+#include "pch.h"
 
 #include "powerups.h"
 #include "player.h"
@@ -16,7 +16,7 @@ bool Powerup::CheckCollision(Position& pos)
 	return false;
 }
 
-ImU32 Powerup::GetColor()
+ImU32 Powerup::GetColor() const
 {
 	return color;
 }

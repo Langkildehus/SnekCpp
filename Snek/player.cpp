@@ -1,6 +1,4 @@
-#include <vector>
-
-#include <imgui.h>
+#include "pch.h"
 
 #include "player.h"
 #include "grid.h"
@@ -73,12 +71,12 @@ Position& Player::GetHead()
 	return tail[0];
 }
 
-ImU32 Player::GetColor()
+ImU32 Player::GetColor() const
 {
 	return color;
 }
 
-Direction Player::GetDirection()
+Direction Player::GetDirection() const
 {
 	return direction;
 }

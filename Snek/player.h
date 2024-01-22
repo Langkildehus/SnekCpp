@@ -1,13 +1,9 @@
 #pragma once
 
-#include <deque>
-
-#include <imgui.h>
-
 // Forward declare Grid
 class Grid;
 
-enum class Direction
+enum class Direction : uint32_t
 {
 	Up,
 	Right,
@@ -38,8 +34,8 @@ public:
 	void SetDirection(Direction newDirection);
 
 	Position& GetHead();
-	ImU32 GetColor();
-	Direction GetDirection();
+	ImU32 GetColor() const;
+	Direction GetDirection() const;
 
 private:
 	void UpdateTail();

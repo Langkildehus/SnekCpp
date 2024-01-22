@@ -1,12 +1,4 @@
-#include <thread>
-#include <vector>
-#include <unordered_map>
-
-// Library imports
-#include <GLFW\glfw3.h>
-
-// Networking imports
-#include "..\Networking\networking.h"
+#include "pch.h"
 
 // Headerfiles
 #include "common.h"
@@ -15,14 +7,14 @@
 #include "grid.h"
 #include "player.h"
 #include "powerups.h"
-#include "inputhandler.h"
 
-#define FRAMETIME 0.25f;
+#define FRAMETIME 0.15f
 #define WIDTH 1300
 #define HEIGHT 1030
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+SnakeClient* client;
 int clientID = -1;
 std::unordered_map<uint32_t, Player> players;
 
@@ -44,33 +36,35 @@ int main()
 	GLFWwindow* window = gui.Init(WIDTH, HEIGHT, "Snake Battle Royale");
 	if (!window)
 	{
-		return 1;
+		return -1;
 	}
 
 	glfwSetKeyCallback(window, key_callback);
 
 	// Create client instance and connect to server
-	SnakeClient client = SnakeClient(clientID, powerups, players, &grid);
-	client.Connect(IP, PORT);
+	client = new SnakeClient(clientID, powerups, players, &grid);
 
-	while (!client.IsConnected())
+	if (!client)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::cout << "Error instantiating client\n";
+		gui.Shutdown();
+		return -2;
 	}
+
+	client->Connect(IP, PORT);
 
 	while (clientID < 0 && !glfwWindowShouldClose(window))
 	{
-		/* --------- WAITING FOR CONNECTION -------- */
-		glfwPollEvents();
-		client.HandleMessages();
-
-		// Update screen
 		gui.NewFrame();
-		// THIS IS WHERE DRAWING SHOULD BE HAPPENING
-		grid.Render();
-
 		gui.Render();
 		glfwSwapBuffers(window);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+		if (client->IsConnected())
+		{
+			client->HandleMessages();
+		}
 	}
 
 	if (!glfwWindowShouldClose(window))
@@ -83,8 +77,6 @@ int main()
 		/* --------------- GAME LOOP --------------- */
 		glfwPollEvents();
 
-		client.HandleMessages();
-
 		ImGuiIO& io = ImGui::GetIO();
 		nextFrame -= io.DeltaTime;
 
@@ -93,9 +85,12 @@ int main()
 			nextFrame += FRAMETIME;
 
 			// Update all players
-			for (std::pair<const uint32_t, Player>& player : players)
+			if (client->IsGameStarted())
 			{
-				player.second.Move();
+				for (std::pair<const uint32_t, Player>& player : players)
+				{
+					player.second.Move();
+				}
 			}
 
 			// Check collission for powerups
@@ -103,22 +98,26 @@ int main()
 			{
 				if (powerups[c].CheckCollision(players[clientID].GetHead()))
 				{
-					client.EatPowerup(c);
+					client->EatPowerup(c);
 					break;
 				}
 			}
 
+			client->HandleMessages();
+
 			// Update position to server
-			std::cout << "Update server\n";
-			client.UpdateServer();
+			client->UpdateServer();
 		}
 
 		// Update screen
 		gui.NewFrame();
 
-		// THIS IS WHERE DRAWING SHOULD BE HAPPENING
+		/* DRAW FRAME HERE */
 
 		grid.Render();
+
+		/* DRAW FRAME HERE */
+
 		gui.Render();
 		glfwSwapBuffers(window);
 	}
@@ -127,27 +126,8 @@ int main()
 	gui.Shutdown();
 
 	// Disconnect from server
-	client.Disconnect();
+	client->Disconnect();
+	delete client;
 
 	return 0;
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	if ((key == GLFW_KEY_W || key == GLFW_KEY_UP) && action == GLFW_PRESS && players[clientID].GetDirection() != Direction::Down)
-	{
-		players[clientID].SetDirection(Direction::Up);
-	}
-	if ((key == GLFW_KEY_A || key == GLFW_KEY_LEFT) && action == GLFW_PRESS && players[clientID].GetDirection() != Direction::Right)
-	{
-		players[clientID].SetDirection(Direction::Left);
-	}
-	if ((key == GLFW_KEY_S || key == GLFW_KEY_DOWN) && action == GLFW_PRESS && players[clientID].GetDirection() != Direction::Up)
-	{
-		players[clientID].SetDirection(Direction::Down);
-	}
-	if ((key == GLFW_KEY_D || key == GLFW_KEY_RIGHT) && action == GLFW_PRESS && players[clientID].GetDirection() != Direction::Left)
-	{
-		players[clientID].SetDirection(Direction::Right);
-	}
 }

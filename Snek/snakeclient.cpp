@@ -1,5 +1,4 @@
-#include <vector>
-#include <iostream>
+#include "pch.h"
 
 #include "snakeclient.h"
 #include "common.h"
@@ -22,6 +21,7 @@ void SnakeClient::UpdateServer()
 	}
 
 	msg << player.tail.size();
+	msg << player.GetDirection();
 
 	// Push ID on top of stack
 	msg << clientID;
@@ -34,8 +34,6 @@ void SnakeClient::HandleMessages()
 	{
 		// Get msg
 		net::Message<MessageTypes> msg = Incoming().PopFront().msg;
-
-		std::cout << "HEADER: " << static_cast<std::underlying_type<MessageTypes>::type>(msg.header.id) << "\n";
 
 		// Look at msg header to determine msg type
 		switch (msg.header.id)
@@ -109,6 +107,18 @@ void SnakeClient::HandleMessages()
 			break;
 		}
 
+		case MessageTypes::RemovePlayer:
+		{
+			int id;
+			msg >> id;
+
+			std::cout << "Client disconnected: " << id << "\n";
+
+			players.erase(id);
+
+			break;
+		}
+
 		case MessageTypes::NewPowerup:
 		{
 			std::cout << "New powerup spawned\n";
@@ -123,15 +133,16 @@ void SnakeClient::HandleMessages()
 
 		case MessageTypes::UpdatePlayer:
 		{
-			std::cout << "Update player position\n";
-
 			// Get player
 			int clientID;
 			msg >> clientID;
 			Player& updatePlayer = players[clientID];
 
-			updatePlayer.tail.clear();
+			Direction dir;
+			msg >> dir;
+			updatePlayer.SetDirection(dir);
 
+			updatePlayer.tail.clear();
 			size_t tailSize;
 			msg >> tailSize;
 
@@ -141,20 +152,40 @@ void SnakeClient::HandleMessages()
 				msg >> pos;
 				updatePlayer.tail.push_front(pos);
 			}
-
 			break;
 		}
 
 		case MessageTypes::PowerupEaten:
 		{
-			std::cout << "PowerupEaten received but not handled\n";
+			std::cout << "PowerupEaten\n";
 
+			PowerupData powerup;
+			msg >> powerup;
+
+			// Delete powerup locally
+			for (int c = 0; c < powerups.size(); c++)
+			{
+				if (powerups[c].x == powerup.x && powerups[c].y == powerup.y)
+				{
+					powerups.erase(powerups.begin() + c);
+					break;
+				}
+			}
+			break;
+		}
+
+		case MessageTypes::StartGame:
+		{
+			std::cout << "Game Started!\n";
+			gameStarted = true;
 			break;
 		}
 		
 		default:
 		{
-			std::cout << "Unhandled msg!!!\n";
+			std::cout << "----------------------------------------------------------\n";
+			std::cout << "Msg type:" << (uint32_t)msg.header.id << "\n";
+			std::cout << "Unhandled msg received!\n";
 			break;
 		}
 		}
@@ -175,4 +206,21 @@ void SnakeClient::EatPowerup(unsigned int c)
 	msg.header.id = MessageTypes::PowerupEaten;
 	msg << powerupEaten;
 	Send(msg);
+}
+
+void SnakeClient::AttemptGameStart()
+{
+	if (!gameStarted)
+	{
+		net::Message<MessageTypes> msg;
+		msg.header.id = MessageTypes::StartGame;
+
+		// Updates gameStarted locally when server confirms that the game is starting
+		Send(msg);
+	}
+}
+
+bool SnakeClient::IsGameStarted() const
+{
+	return gameStarted;
 }

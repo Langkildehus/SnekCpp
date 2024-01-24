@@ -8,7 +8,7 @@
 #include "player.h"
 #include "powerups.h"
 
-#define FRAMETIME 0.15f
+#define FRAMETIME 0.10f
 #define WIDTH 1300
 #define HEIGHT 1030
 
@@ -87,7 +87,7 @@ int main()
 			nextFrame += FRAMETIME;
 
 			// Update all players
-			if (client->IsGameStarted())
+			if (client->IsGameStarted() || true)
 			{
 				for (std::pair<const uint32_t, Player>& player : players)
 				{

@@ -133,10 +133,11 @@ void SnakeClient::HandleMessages()
 
 		case MessageTypes::UpdatePlayer:
 		{
+			std::cout << "UPDATE PLAYER\n";
 			// Get player
-			int clientID;
-			msg >> clientID;
-			Player& updatePlayer = players[clientID];
+			int newClientID;
+			msg >> newClientID;
+			Player& updatePlayer = players[newClientID];
 
 			Direction dir;
 			msg >> dir;
@@ -210,8 +211,9 @@ void SnakeClient::EatPowerup(unsigned int c)
 
 void SnakeClient::AttemptGameStart()
 {
-	if (!gameStarted)
+	if (!IsGameStarted())
 	{
+		std::cout << "I PRESSED P :O\n";
 		net::Message<MessageTypes> msg;
 		msg.header.id = MessageTypes::StartGame;
 

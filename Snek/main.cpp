@@ -36,6 +36,7 @@ int main()
 	GLFWwindow* window = gui.Init(WIDTH, HEIGHT, "Snake Battle Royale");
 	if (!window)
 	{
+		delete client;
 		return -1;
 	}
 
@@ -48,6 +49,7 @@ int main()
 	{
 		std::cout << "Error instantiating client\n";
 		gui.Shutdown();
+		delete client;
 		return -2;
 	}
 

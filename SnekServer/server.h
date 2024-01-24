@@ -46,4 +46,6 @@ private:
 	std::vector<Position> grid;
 
 	std::vector<Position> spawnpoints;
+
+	bool gameStarted = false;
 };

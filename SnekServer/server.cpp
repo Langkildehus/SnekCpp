@@ -19,7 +19,7 @@ bool Server::OnClientConnect(std::shared_ptr<net::Connection<MessageTypes>> clie
 
 	if (spawnpoints.size() > 0)
 	{
-		return true;
+		return !gameStarted;
 	}
 
 	std::cout << "No more spawnpoints available!\n";
@@ -156,6 +156,7 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 	case MessageTypes::StartGame:
 	{
 		std::cout << "Game Started by" << client->GetID() << "\n";
+		gameStarted = true;
 		MessageAllClients(msg);
 		break;
 	}

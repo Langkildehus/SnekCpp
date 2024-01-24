@@ -64,8 +64,11 @@ void SnakeClient::HandleMessages()
 				int playerID;
 				msg >> playerID;
 
+				ImU32 color;
+				msg >> color;
+
 				// Create player
-				Player player = Player(gridPointer, ImColor(0.1f, 0.1f, 1.0f, 1.0f));
+				Player player = Player(gridPointer, color);
 
 				// Get players tail
 				size_t tailSize;
@@ -90,7 +93,10 @@ void SnakeClient::HandleMessages()
 			uint32_t newClientID;
 			msg >> newClientID;
 
-			Player newPlayer = Player(gridPointer, ImColor(0.1f, 0.1f, 1.0f, 1.0f));
+			ImU32 color;
+			msg >> color;
+
+			Player newPlayer = Player(gridPointer, color);
 			
 			size_t tailSize;
 			msg >> tailSize;

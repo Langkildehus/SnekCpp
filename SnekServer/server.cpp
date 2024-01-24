@@ -35,7 +35,7 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 	// Create player locally
 	PlayerData player;
 	player.direction = Direction::Up;
-	player.color = ImColor(1.0f, 0.1f, 0.1f, 1.0f);
+	player.color = ImColor(rand() % 256, rand() % 256, rand() % 256, 255);
 	player.tail.emplace_front(spawnpoint.x, spawnpoint.y);
 
 	players[client->GetID()] = player;
@@ -49,11 +49,14 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 	{
 		AddPlayerToMsg(msgState, otherPlayer.second);
 
+		msgState << otherPlayer.second.color;
+
 		// Add ID to top of player stack
 		msgState << otherPlayer.first;
 	}
 	msgState << players.size();
 	std::cout << "Players size: " << players.size() << "\n";
+
 
 	// Add powerups to msg
 	for (PowerupData powerup : powerups)
@@ -74,6 +77,7 @@ void Server::OnClientValidated(std::shared_ptr<net::Connection<MessageTypes>> cl
 	msg.header.id = MessageTypes::NewPlayer;
 
 	AddPlayerToMsg(msg, player);
+	msg << player.color;
 
 	msg << client->GetID();
 

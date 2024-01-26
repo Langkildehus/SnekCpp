@@ -8,6 +8,12 @@ Player::Player(Grid* _grid, ImU32 _color)
 
 void Player::Move()
 {
+	// Don't move if dead
+	if (!alive)
+	{
+		return;
+	}
+
 	switch (direction)
 	{
 	case Direction::Up:
@@ -64,6 +70,17 @@ void Player::AddLength(int l)
 void Player::SetDirection(Direction newDirection)
 {
 	direction = newDirection;
+}
+
+void Player::Kill()
+{
+	alive = false;
+	tail = std::deque<Position>;
+}
+
+bool Player::IsAlive() const
+{
+	return alive;
 }
 
 Position& Player::GetHead()

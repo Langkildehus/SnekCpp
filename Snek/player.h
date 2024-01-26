@@ -32,7 +32,9 @@ public:
 	void Move();
 	void AddLength(int l);
 	void SetDirection(Direction newDirection);
+	void Kill();
 
+	bool IsAlive() const;
 	Position& GetHead();
 	ImU32 GetColor() const;
 	Direction GetDirection() const;
@@ -44,6 +46,8 @@ public:
 	std::deque<Position> tail;
 
 private:
+	bool alive = true;
+
 	int food = 0;
 
 	Direction direction;

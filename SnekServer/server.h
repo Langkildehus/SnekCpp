@@ -37,6 +37,7 @@ protected:
 	void GenerateGrid();
 	void GenerateSpawnpoints();
 
+	void SendKillMessage(int clientID);
 	void AddPlayerToMsg(net::Message<MessageTypes>& msg, PlayerData& player);
 
 private:

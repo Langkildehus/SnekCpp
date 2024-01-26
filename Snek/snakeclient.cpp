@@ -187,6 +187,16 @@ void SnakeClient::HandleMessages()
 			gameStarted = true;
 			break;
 		}
+
+		case MessageTypes::KillPlayer:
+		{
+			int playerKilledID;
+			msg >> playerKilledID;
+			std::cout << "Player killed [ID]:" << playerKilledID << "\n";
+
+			players[playerKilledID].Kill();
+			break;
+		}
 		
 		default:
 		{

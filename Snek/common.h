@@ -19,5 +19,6 @@ enum class MessageTypes : uint32_t
 
 	UpdatePlayer,     // Player data
 	NewPowerup,       // Send to tell clients about a new powerup
-	PowerupEaten      // Send when client eats powerup
+	PowerupEaten,     // Send when client eats powerup
+	KillPlayer
 };

@@ -133,8 +133,8 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 		// Update all other clients
 		MessageAllClients(msg, client);
 
-		int _clientID;
-		msg >> _clientID;
+		int clientID;
+		msg >> clientID;
 
 		// Delete tail locally
 		PlayerData& player = players.at(client->GetID());
@@ -154,6 +154,9 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 
 			player.tail.emplace_front(pos.x, pos.y);
 		}
+
+		PlayerCollision(clientID);
+
 		break;
 	}
 
@@ -270,6 +273,15 @@ void Server::GenerateSpawnpoints()
 	spawnpoints.emplace_back(GRIDWIDTH / 4,		2 * GRIDHEIGHT / 3);
 	spawnpoints.emplace_back(2 * GRIDWIDTH / 4,	2 * GRIDHEIGHT / 3);
 	spawnpoints.emplace_back(3 * GRIDWIDTH / 4,	2 * GRIDHEIGHT / 3);
+}
+
+void Server::SendKillMessage(int clientID)
+{
+	net::Message<MessageTypes> msg;
+	msg.header.id = MessageTypes::KillPlayer;
+	msg << clientID;
+
+	MessageAllClients(msg);
 }
 
 void Server::AddPlayerToMsg(net::Message<MessageTypes>& msg, PlayerData& player)

@@ -75,7 +75,7 @@ void Player::SetDirection(Direction newDirection)
 void Player::Kill()
 {
 	alive = false;
-	tail = std::deque<Position>;
+	tail = std::deque<Position>();
 }
 
 bool Player::IsAlive() const

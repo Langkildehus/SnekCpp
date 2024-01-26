@@ -156,7 +156,6 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 		}
 
 		PlayerCollision(clientID);
-
 		break;
 	}
 

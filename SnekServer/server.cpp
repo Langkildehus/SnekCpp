@@ -294,13 +294,13 @@ void Server::AddPlayerToMsg(net::Message<MessageTypes>& msg, PlayerData& player)
 	msg << player.tail.size();
 }
 
-void Server::PlayerCollision(int clientID)
+void Server::PlayerCollision(int clientID) // Hit/Kill detection
 {
-	for (std::pair<const uint32_t, PlayerData>& player : players)
+	for (std::pair<const uint32_t, PlayerData>& player : players) // For all players
 	{
-		if (player.first == clientID)
+		if (player.first == clientID) // Check for clients own tail
 		{
-			for (int c = 4 c < player.second.tail.size(); c++)
+			for (int c = 4; c < player.second.tail.size(); c++)
 			{
 				if (player.second.tail[c].x == players[clientID].tail[0].x && player.second.tail[c].y == players[clientID].tail[0].y)
 				{
@@ -309,7 +309,7 @@ void Server::PlayerCollision(int clientID)
 				}
 			}
 		}
-		else
+		else // Check for other players tails
 		{
 			for (Position& pos : player.second.tail)
 			{

@@ -293,3 +293,32 @@ void Server::AddPlayerToMsg(net::Message<MessageTypes>& msg, PlayerData& player)
 	// Add tail size to top of stack
 	msg << player.tail.size();
 }
+
+void Server::PlayerCollision(int clientID)
+{
+	for (std::pair<const uint32_t, PlayerData>& player : players)
+	{
+		if (player.first == clientID)
+		{
+			for (int c = 1; c < player.second.tail.size(); c++)
+			{
+				if (player.second.tail[c].x == players[clientID].tail[0].x && player.second.tail[c].y == players[clientID].tail[0].y)
+				{
+					SendKillMessage(clientID);
+					return;
+				}
+			}
+		}
+		else
+		{
+			for (Position& pos : player.second.tail)
+			{
+				if (pos.x == players[clientID].tail[0].x && pos.y == players[clientID].tail[0].y)
+				{
+					SendKillMessage(clientID);
+					return;
+				}
+			}
+		}
+	}
+}

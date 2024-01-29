@@ -39,6 +39,7 @@ protected:
 
 	void SendKillMessage(int clientID);
 	void AddPlayerToMsg(net::Message<MessageTypes>& msg, PlayerData& player);
+	void PlayerCollision(int clientID);
 
 private:
 	std::unordered_map<uint32_t, PlayerData> players;

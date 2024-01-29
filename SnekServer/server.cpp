@@ -147,7 +147,7 @@ void Server::OnMessage(std::shared_ptr<net::Connection<MessageTypes>> client, ne
 		msg >> tailLength;
 
 		// Update tail locally
-		for (unsigned int c = 0; c < 1; c++)//tailLength; c++)
+		for (unsigned int c = 0; c < tailLength; c++)//tailLength; c++)
 		{
 			Position pos;
 			msg >> pos;

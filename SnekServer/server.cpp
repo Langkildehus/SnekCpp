@@ -300,7 +300,7 @@ void Server::PlayerCollision(int clientID)
 	{
 		if (player.first == clientID)
 		{
-			for (int c = 1; c < player.second.tail.size(); c++)
+			for (int c = 4 c < player.second.tail.size(); c++)
 			{
 				if (player.second.tail[c].x == players[clientID].tail[0].x && player.second.tail[c].y == players[clientID].tail[0].y)
 				{
